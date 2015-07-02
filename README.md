@@ -11,4 +11,4 @@ To run application execute these two commands in <i>bookcase</i> directory:
 
 <b>mvn wildfly:run</b>
 
-To verify that it works, go to <a href="http://localhost:8080/bookcase-1.0-SNAPSHOT/bookcase/admin" target="_blank">http://localhost:8080/bookcase-1.0-SNAPSHOT/bookcase/admin</a>
+To verify that it works, go to <a href="http://localhost:8080/bookcase/app/status" target="_blank">http://localhost:8080/bookcase-1.0-SNAPSHOT/bookcase/admin</a>
