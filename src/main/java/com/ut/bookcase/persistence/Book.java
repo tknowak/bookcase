@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 
 @Entity
@@ -17,6 +18,8 @@ public class Book {
     private int bookId;
     private String title;
     private String author;
+    @ManyToOne
+    private Person holder;
 
     private Book() {
     }
@@ -26,11 +29,23 @@ public class Book {
         this.author = author;
     }
 
+    public int getBookId() {
+        return bookId;
+    }
+
     public String getTitle() {
         return title;
     }
 
     public String getAuthor() {
         return author;
+    }
+
+    public Person getHolder() {
+        return holder;
+    }
+
+    public void setHolder(Person holder) {
+        this.holder = holder;
     }
 }

@@ -1,7 +1,9 @@
 package com.ut.bookcase.service;
 
 import com.ut.bookcase.persistence.Book;
+import com.ut.bookcase.persistence.Person;
 import com.ut.bookcase.web.dto.BookDTO;
+import com.ut.bookcase.web.dto.PersonDTO;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -20,7 +22,11 @@ public class AdministrationService {
         TypedQuery<Book> allBooksQuery = em.createNamedQuery(Book.ALL_BOOKS, Book.class);
         List<Book> allBooks = allBooksQuery.getResultList();
         return allBooks.stream()
-                .map(book -> new BookDTO(book.getTitle(), book.getAuthor()))
+                .map(book -> {
+                    Person holder = book.getHolder();
+                    PersonDTO personDTO = holder != null ? new PersonDTO(holder.getId(), holder.getName()) : null;
+                    return new BookDTO(book.getBookId(), book.getTitle(), book.getAuthor(), personDTO);
+                })
                 .collect(Collectors.toList());
     }
 

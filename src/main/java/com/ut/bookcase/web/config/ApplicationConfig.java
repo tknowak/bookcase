@@ -1,6 +1,7 @@
 package com.ut.bookcase.web.config;
 
 import com.ut.bookcase.web.AdministrationController;
+import com.ut.bookcase.web.LendingController;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -12,6 +13,6 @@ import java.util.Set;
 public class ApplicationConfig extends Application {
 
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(SetupStatus.class, AdministrationController.class));
+        return new HashSet<>(Arrays.asList(SetupStatus.class, AdministrationController.class, LendingController.class));
     }
 }
