@@ -5,16 +5,16 @@ public class BookDTO {
     private int id;
     private String title;
     private String author;
-    private PersonDTO personDTO;
+    private FriendDTO friendDTO;
 
     private BookDTO() {
     }
 
-    public BookDTO(int id, String title, String author, PersonDTO personDTO) {
+    public BookDTO(int id, String title, String author, FriendDTO friendDTO) {
         this.id = id;
         this.title = title;
         this.author = author;
-        this.personDTO = personDTO;
+        this.friendDTO = friendDTO;
     }
 
     public int getId() {
@@ -29,7 +29,7 @@ public class BookDTO {
         return author;
     }
 
-    public PersonDTO getPersonDTO() {
-        return personDTO;
+    public FriendDTO getFriendDTO() {
+        return friendDTO;
     }
 }

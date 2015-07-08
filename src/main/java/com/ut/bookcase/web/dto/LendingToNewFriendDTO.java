@@ -1,13 +1,13 @@
 package com.ut.bookcase.web.dto;
 
-public class LendingToNewPersonDTO {
+public class LendingToNewFriendDTO {
     private String name;
     private int bookId;
 
-    private LendingToNewPersonDTO() {
+    private LendingToNewFriendDTO() {
     }
 
-    public LendingToNewPersonDTO(String name, int bookId) {
+    public LendingToNewFriendDTO(String name, int bookId) {
         this.name = name;
         this.bookId = bookId;
     }

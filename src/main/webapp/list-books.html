@@ -19,7 +19,7 @@ var url = "http://localhost:8080/bookcase/app/books";
 
 xmlhttp.onreadystatechange=function() {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        loadBooks(xmlhttp.responseText);
+        loadFriendsList(xmlhttp.responseText);
     }
 }
 xmlhttp.open("GET", url, true);
@@ -42,16 +42,47 @@ function addBook() {
     });
 }
 
-function loadBooks(response) {
+function loadFriendsList(response) {
+    $.ajax({
+        url:'http://localhost:8080/bookcase/app/friends',
+        type:'GET',
+        dataType: 'json',
+        success: function( json ) {
+            loadBooks(response, json);
+        }
+    });
+}
+
+function loadBooks(response, friendsList) {
     var arr = JSON.parse(response);
     var i;
     var out = "<table>";
 
     for(i = 0; i < arr.length; i++) {
         var holder = "";
-        if (arr[i].personDTO != null) {
-            holder = arr[i].personDTO.name;
+        if (arr[i].friendDTO != null) {
+            holder = arr[i].friendDTO.name;
         }
+
+        var friendsHtml = ""
+        var bookOfFriendId = "bookOfFriend-" + arr[i].id;
+        if (friendsList != "") {
+            friendsHtml = "<select id=\"" + bookOfFriendId + "\">";
+            for (j = 0; j < friendsList.length; j++){
+                friendsHtml += "<option value=\"" + friendsList[j].id + "\">" + friendsList[j].name + "</option>";
+            }
+            friendsHtml += "</select>";
+        }
+
+        var returnBook = "";
+        if (holder != "") {
+            returnBook = "<input type=\"button\" value=\"Return\" onclick=\"returnBook(" + arr[i].id + ")\"/>"
+        }
+
+        if (friendsList != "") {
+            friendsHtml += "<input type=\"button\" value=\"Lend\" onclick=\"lendBook(\'" + bookOfFriendId + "\', " + arr[i].id + ")\"/>";
+        }
+
         out += "<tr><td>" +
 
         "<input type=\"radio\" name=\"bookId\" value=\"" + (arr[i].id) + "\">" +
@@ -63,19 +94,59 @@ function loadBooks(response) {
         arr[i].author +
         "</td><td>" +
         holder +
+        "</td><td>" +
+        returnBook +
+        "</td><td>" +
+        friendsHtml +
         "</td></tr>";
     }
     out += "</table>";
     document.getElementById("booksList").innerHTML = out;
 }
 
-function lendBookToNewPerson() {
+function returnBook(bookId) {
     var lending = {
-        "name": $("#name").val(),
-        "bookId":$("input[name=bookId]:checked").val()
+        "bookId" : bookId
     }
     $.ajax({
-        url: 'http://localhost:8080/bookcase/app/lend/new-person',
+        url: 'http://localhost:8080/bookcase/app/lend/return',
+        type: 'put',
+        dataType: 'json',
+        contentType:"application/json",
+        success: function (data) {
+            location.reload();
+        },
+        data: JSON.stringify(lending)
+    });
+}
+
+function lendBook(bookOfFriendId, bookId) {
+    var e = document.getElementById(bookOfFriendId);
+    var borrowerId = e.options[e.selectedIndex].value;
+
+    var lending = {
+        "borrowerId" : borrowerId,
+        "bookId" : bookId
+    }
+    $.ajax({
+        url: 'http://localhost:8080/bookcase/app/lend',
+        type: 'put',
+        dataType: 'json',
+        contentType:"application/json",
+        success: function (data) {
+            location.reload();
+        },
+        data: JSON.stringify(lending)
+    });
+}
+
+function lendBookToNewFriend() {
+    var lending = {
+        "name" : $("#name").val(),
+        "bookId" : $("input[name=bookId]:checked").val()
+    }
+    $.ajax({
+        url: 'http://localhost:8080/bookcase/app/lend/new-friend',
         type: 'put',
         dataType: 'json',
         contentType:"application/json",
@@ -88,6 +159,6 @@ function lendBookToNewPerson() {
 </script>
 <br/>
 Lend book to new friend <input type="text" id="name"/>
-<input type="button" id="lendToNew" value="Lend" onclick="lendBookToNewPerson()"/>
+<input type="button" id="lendToNew" value="Lend" onclick="lendBookToNewFriend()"/>
 </body>
 </html>

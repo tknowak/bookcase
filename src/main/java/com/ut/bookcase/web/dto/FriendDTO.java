@@ -1,14 +1,14 @@
 package com.ut.bookcase.web.dto;
 
-public class PersonDTO {
+public class FriendDTO {
 
     private int id;
     private String name;
 
-    private PersonDTO() {
+    private FriendDTO() {
     }
 
-    public PersonDTO(int id, String name) {
+    public FriendDTO(int id, String name) {
         this.id = id;
         this.name = name;
     }

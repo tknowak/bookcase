@@ -2,7 +2,7 @@ package com.ut.bookcase.web;
 
 import com.ut.bookcase.service.LendingService;
 import com.ut.bookcase.web.dto.LendingDTO;
-import com.ut.bookcase.web.dto.LendingToNewPersonDTO;
+import com.ut.bookcase.web.dto.LendingToNewFriendDTO;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
@@ -23,16 +23,16 @@ public class LendingController {
     }
 
     @PUT
-    @Path("new-person")
+    @Path("new-friend")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void lendBookToNewPerson(LendingToNewPersonDTO lendingDTO) {
-        lendingService.lendBookToNewPerson(lendingDTO);
+    public void lendBookToNewFriend(LendingToNewFriendDTO lendingDTO) {
+        lendingService.lendBookToNewFriend(lendingDTO);
     }
 
     @PUT
     @Path("return")
     @Consumes(MediaType.APPLICATION_JSON)
     public void returnBook(LendingDTO lendingDTO) {
-        lendingService.returnBook(lendingDTO);
+        lendingService.returnBook(lendingDTO.getBookId());
     }
 }

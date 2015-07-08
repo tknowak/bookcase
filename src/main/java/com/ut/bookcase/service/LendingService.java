@@ -1,11 +1,11 @@
 package com.ut.bookcase.service;
 
+import com.ut.bookcase.persistence.Friend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.ut.bookcase.persistence.Book;
-import com.ut.bookcase.persistence.Person;
 import com.ut.bookcase.web.dto.LendingDTO;
-import com.ut.bookcase.web.dto.LendingToNewPersonDTO;
+import com.ut.bookcase.web.dto.LendingToNewFriendDTO;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -22,27 +22,26 @@ public class LendingService {
     public void lendBook(LendingDTO lendingDTO) {
         logger.info("lendingDTO - book id: {}, borrower id: {}", lendingDTO.getBookId(), lendingDTO.getBorrowerId());
 
-        Person borrower = em.find(Person.class, lendingDTO.getBorrowerId());
+        Friend borrower = em.find(Friend.class, lendingDTO.getBorrowerId());
         Book book = em.find(Book.class, lendingDTO.getBookId());
 
         book.setHolder(borrower);
     }
 
-    public void lendBookToNewPerson(LendingToNewPersonDTO lendingDTO) {
+    public void lendBookToNewFriend(LendingToNewFriendDTO lendingDTO) {
         logger.info("lendingDTO - book id: {}, friend: {}", lendingDTO.getBookId(), lendingDTO.getName());
 
-        Person person = new Person(lendingDTO.getName());
-        em.persist(person);
+        Friend friend = new Friend(lendingDTO.getName());
+        em.persist(friend);
 
         Book book = em.find(Book.class, lendingDTO.getBookId());
-        book.setHolder(person);
+        book.setHolder(friend);
     }
 
-    public void returnBook(LendingDTO lendingDTO) {
-        logger.info("lendingDTO - book id: {}, borrower id: {}", lendingDTO.getBookId(), lendingDTO.getBorrowerId());
+    public void returnBook(int bookId) {
+        logger.info("Returning book with id: {}", bookId);
 
-        Book book = em.find(Book.class, lendingDTO.getBookId());
-
+        Book book = em.find(Book.class, bookId);
         book.setHolder(null);
     }
 }

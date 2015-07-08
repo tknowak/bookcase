@@ -19,7 +19,7 @@ public class Book {
     private String title;
     private String author;
     @ManyToOne
-    private Person holder;
+    private Friend holder;
 
     private Book() {
     }
@@ -41,11 +41,11 @@ public class Book {
         return author;
     }
 
-    public Person getHolder() {
+    public Friend getHolder() {
         return holder;
     }
 
-    public void setHolder(Person holder) {
+    public void setHolder(Friend holder) {
         this.holder = holder;
     }
 }

@@ -1,9 +1,9 @@
 package com.ut.bookcase.service;
 
 import com.ut.bookcase.persistence.Book;
-import com.ut.bookcase.persistence.Person;
+import com.ut.bookcase.persistence.Friend;
 import com.ut.bookcase.web.dto.BookDTO;
-import com.ut.bookcase.web.dto.PersonDTO;
+import com.ut.bookcase.web.dto.FriendDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +27,9 @@ public class AdministrationService {
         List<Book> allBooks = allBooksQuery.getResultList();
         return allBooks.stream()
                 .map(book -> {
-                    Person holder = book.getHolder();
-                    PersonDTO personDTO = holder != null ? new PersonDTO(holder.getId(), holder.getName()) : null;
-                    return new BookDTO(book.getBookId(), book.getTitle(), book.getAuthor(), personDTO);
+                    Friend holder = book.getHolder();
+                    FriendDTO friendDTO = holder != null ? new FriendDTO(holder.getId(), holder.getName()) : null;
+                    return new BookDTO(book.getBookId(), book.getTitle(), book.getAuthor(), friendDTO);
                 })
                 .collect(Collectors.toList());
     }
