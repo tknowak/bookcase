@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+
+<h1>Books</h1>
+Title <input type="text" id="title"/><br/>
+Author <input type="text" id="author"/>
+<input type="button" value="Add book" onclick="addBook()"/>
+<hr/>
+
+<div id="booksList"></div>
+
+<script>
+var xmlhttp = new XMLHttpRequest();
+var url = "http://localhost:8080/bookcase/app/books";
+
+xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        loadBooks(xmlhttp.responseText);
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function addBook() {
+    var book = {
+        "title": $("#title").val(),
+        "author": $("#author").val()
+    }
+    $.ajax({
+        url: 'http://localhost:8080/bookcase/app/books',
+        type: 'post',
+        dataType: 'json',
+        contentType:"application/json",
+        success: function (data) {
+            location.reload();
+        },
+        data: JSON.stringify(book)
+    });
+}
+
+function loadBooks(response) {
+    var arr = JSON.parse(response);
+    var i;
+    var out = "<table>";
+
+    for(i = 0; i < arr.length; i++) {
+        var holder = "";
+        if (arr[i].personDTO != null) {
+            holder = arr[i].personDTO.name;
+        }
+        out += "<tr><td>" +
+
+        "<input type=\"radio\" name=\"bookId\" value=\"" + (arr[i].id) + "\">" +
+        "</td><td>" +
+        arr[i].id +
+        "</td><td>" +
+        arr[i].title +
+        "</td><td>" +
+        arr[i].author +
+        "</td><td>" +
+        holder +
+        "</td></tr>";
+    }
+    out += "</table>";
+    document.getElementById("booksList").innerHTML = out;
+}
+
+function lendBookToNewPerson() {
+    var lending = {
+        "name": $("#name").val(),
+        "bookId":$("input[name=bookId]:checked").val()
+    }
+    $.ajax({
+        url: 'http://localhost:8080/bookcase/app/lend/new-person',
+        type: 'put',
+        dataType: 'json',
+        contentType:"application/json",
+        success: function (data) {
+            location.reload();
+        },
+        data: JSON.stringify(lending)
+    });
+}
+</script>
+<br/>
+Lend book to new friend <input type="text" id="name"/>
+<input type="button" id="lendToNew" value="Lend" onclick="lendBookToNewPerson()"/>
+</body>
+</html>

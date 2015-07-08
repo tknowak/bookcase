@@ -4,6 +4,8 @@ import com.ut.bookcase.persistence.Book;
 import com.ut.bookcase.persistence.Person;
 import com.ut.bookcase.web.dto.BookDTO;
 import com.ut.bookcase.web.dto.PersonDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,6 +16,8 @@ import java.util.stream.Collectors;
 
 @Stateless
 public class AdministrationService {
+
+    Logger logger = LoggerFactory.getLogger(AdministrationService.class);
 
     @PersistenceContext(unitName = "bookcase-unit")
     private EntityManager em;
@@ -31,6 +35,8 @@ public class AdministrationService {
     }
 
     public void addBookToBookcase(BookDTO bookDTO) {
+        logger.info("bookDTO - title: {}, author: {}", bookDTO.getTitle(), bookDTO.getAuthor());
+
         Book book = new Book(bookDTO.getTitle(), bookDTO.getAuthor());
         em.persist(book);
     }
